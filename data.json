@@ -1,0 +1,16 @@
+[
+    {
+        "id": "1",
+        "name": "Sharoon",
+        "mobile": "8619326104",
+        "dob": "27041996",
+        "address": "Chennai"
+    },
+    {
+        "id": "2",
+        "name": "Tarun",
+        "mobile": "9566701002",
+        "dob": "10081989",
+        "address": "Delhi"
+    }
+]
