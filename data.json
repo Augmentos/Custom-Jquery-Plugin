@@ -8,9 +8,23 @@
     },
     {
         "id": "2",
-        "name": "ABC",
+        "name": "BC",
         "mobile": "9566701002",
         "salary": "3000",
+        "address": "Delhi"
+    },
+    {
+        "id": "3",
+        "name": "Mano",
+        "mobile": "9566701002",
+        "salary": "1000",
+        "address": "Delhi"
+    },
+    {
+        "id": "4",
+        "name": "Opq",
+        "mobile": "9566701002",
+        "salary": "9000",
         "address": "Delhi"
     }
 ]

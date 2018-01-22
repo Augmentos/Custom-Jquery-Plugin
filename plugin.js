@@ -16,25 +16,23 @@ function loadJSON(file, callback) {
 function callback(response) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("divRows");
-    var term = obj.id;
 
     if (sort) {
         while (content.firstChild) {
             content.removeChild(content.firstChild);
         }
         actualJSON.sort(function (one, another) {
+            console.log(obj.id);
             if (sortDescending) {
-                sortDescending = false;
                 return one[obj.id] < another[obj.id];
-
             }
             else {
-                sortDescending = true;
                 return one[obj.id] > another[obj.id];
             }
 
         });
-
+        if (sortDescending) sortDescending = false;
+        else sortDescending = true;
         sort = false;
     }
 
@@ -80,7 +78,7 @@ function callback(response) {
     $.fn.buildTable = function (options) {
         // Default options
         var settings = $.extend({
-            source: "http://localhost/plugin/data.json"
+            source: "./data.json"
         }, options);
 
         loadJSON(settings.source, callback);
@@ -89,7 +87,7 @@ function callback(response) {
     $.fn.sortNumber = function (options) {
         // Default options
         var settings = $.extend({
-            source: "http://localhost/plugin/data.json"
+            source: "./data.json"
         }, options);
 
         this.click(function () {
