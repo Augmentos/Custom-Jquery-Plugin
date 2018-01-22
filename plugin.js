@@ -1,4 +1,6 @@
 
+var sortDescending = true, sort = false;
+var obj = {};
 function loadJSON(file, callback) {
     var requestObject = new XMLHttpRequest();
     requestObject.overrideMimeType("application/json");
@@ -13,10 +15,35 @@ function loadJSON(file, callback) {
 
 function callback(response) {
     var actualJSON = JSON.parse(response);
+    var content = document.getElementById("divRows");
+    var term = obj.id;
+
+    if (sort) {
+        while (content.firstChild) {
+            content.removeChild(content.firstChild);
+        }
+        actualJSON.sort(function (one, another) {
+            if (sortDescending) {
+                sortDescending = false;
+                return one[obj.id] < another[obj.id];
+
+            }
+            else {
+                sortDescending = true;
+                return one[obj.id] > another[obj.id];
+            }
+
+        });
+
+        sort = false;
+    }
+
+
 
     for (var i = 0; i < actualJSON.length; i++) {
         //Create table using divs
-        var content = document.getElementById("divRows");
+
+
         var div = document.createElement("div");
         div.setAttribute("class", "divRow");
         var divCell1 = document.createElement("div");
@@ -32,12 +59,12 @@ function callback(response) {
         var id = document.createTextNode(actualJSON[i].id);
         var name = document.createTextNode(actualJSON[i].name);
         var mobile = document.createTextNode(actualJSON[i].mobile);
-        var dob = document.createTextNode(actualJSON[i].dob);
+        var salary = document.createTextNode(actualJSON[i].salary);
         var address = document.createTextNode(actualJSON[i].address);
         divCell1.appendChild(id);
         divCell2.appendChild(name);
         divCell3.appendChild(mobile);
-        divCell4.appendChild(dob);
+        divCell4.appendChild(salary);
         divCell5.appendChild(address);
         div.appendChild(divCell1);
         div.appendChild(divCell2);
@@ -48,6 +75,7 @@ function callback(response) {
     }
 }
 
+
 (function ($) {
     $.fn.buildTable = function (options) {
         // Default options
@@ -57,4 +85,20 @@ function callback(response) {
 
         loadJSON(settings.source, callback);
     };
+
+    $.fn.sortNumber = function (options) {
+        // Default options
+        var settings = $.extend({
+            source: "http://localhost/plugin/data.json"
+        }, options);
+
+        this.click(function () {
+            sort = true;
+            obj = this;
+            loadJSON(settings.source, callback);
+        });
+    };
+
+
 }(jQuery));
+

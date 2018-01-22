@@ -8,7 +8,7 @@
                 display: table;
                 width: auto;
                 background-color: #eee;
-                border: 1px solid #666666;
+                border: 2px solid #666666;
                 border-spacing: 5px;
                 /* border-collapse:separate;*/
             }
@@ -16,7 +16,9 @@
             .divRow {
                 display: table-row;
                 width: auto;
+
             }
+
 
             .divCell {
                 float: left;
@@ -37,14 +39,14 @@
                         <div class="divCell" align="center">
                             <strong> ID</strong>
                         </div>
-                        <div class="divCell">
+                        <div class="divCell" id="name" style=" cursor: pointer; ">
                             <strong> Name</strong>
                         </div>
                         <div class="divCell">
                             <strong> Mobile</strong>
                         </div>
-                        <div class="divCell">
-                            <strong>DOB</strong>
+                        <div class="divCell" id="salary" style="cursor: pointer; ">
+                            <strong>Salary</strong>
                         </div>
                         <div class="divCell">
                             <strong>Customer Address</strong>
@@ -62,6 +64,8 @@
             <script>
                 $(document).ready(function () {
                     $("#divRows").buildTable({ source: "http://localhost/plugin/data.json" });
+                    $("#salary").sortNumber();
+                    $("#name").sortNumber();
                 });
             </script>
     </body>

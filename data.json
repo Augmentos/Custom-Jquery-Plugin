@@ -1,16 +1,16 @@
 [
     {
         "id": "1",
-        "name": "Sharoon",
+        "name": "XYZ",
         "mobile": "8619326104",
-        "dob": "27041996",
+        "salary": "2000",
         "address": "Chennai"
     },
     {
         "id": "2",
-        "name": "Tarun",
+        "name": "ABC",
         "mobile": "9566701002",
-        "dob": "10081989",
+        "salary": "3000",
         "address": "Delhi"
     }
 ]
