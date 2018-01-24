@@ -7,15 +7,21 @@ function loadJSON(file, callback) {
     requestObject.open('GET', file, true);
     requestObject.onreadystatechange = function () {
         if (requestObject.readyState == 4 && requestObject.status == "200") {
-            callback(requestObject.responseText);
+            callback(requestObject.responseText,false);
         }
     };
     requestObject.send(null);
 }
 
-function callback(response) {
+function callback(response, search) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("results");
+    if (search) { 
+        while (document.getElementsByClassName("data")[0]) {
+            content.removeChild(document.getElementsByClassName("data")[0]);
+        }
+
+    }
 
     if (sort) {
         while (document.getElementsByClassName("data")[0]) {
@@ -141,6 +147,63 @@ function callback(response) {
             obj = this;
             loadJSON(settings.source, callback);
         });
+    };
+
+    $.fn.customSearch = function (options) {
+        // Default options
+        var settings = $.extend({
+            source: "./data.json",
+            searchTerm: "youCanOverideHere"
+        }, options);
+
+        $(this).keyup(function () {
+            if (!this.value) {
+                var content = document.getElementById("results");
+                while (document.getElementsByClassName("data")[0]) {
+                    content.removeChild(document.getElementsByClassName("data")[0]);
+                }
+                loadJSON(settings.source,callback);
+            }
+          });
+        
+        $(this).autocomplete({
+            
+            source: function (req, res) {
+            
+                var regex = new RegExp(req.term, 'i');
+                $.ajax({
+                    url: settings.source,
+                    dataType: "json",
+                    type: "GET",
+                    data: {
+                        term: req.term
+                    },
+                    success: function (data) {
+                        var obj = [];
+                       
+                        res($.map(data, function (item) {
+                            if (regex.test(item[settings.searchTerm])) {
+                                obj.push(item);
+                                console.log(settings.searchTerm);
+                                
+                                callback(JSON.stringify(obj),true);
+
+                            }
+                           
+                        }));
+                    
+                    },
+                    error: function (xhr) {
+
+                    }
+                });
+            },
+            select: function (event, ui) {
+               
+                }
+            
+        });
+
     };
 
 
