@@ -1,6 +1,5 @@
 
-var sortDescending = true, sort = false;
-var obj = {};
+var sortDescending = true, sort = false, sortTerm;
 function loadJSON(file, callback) {
     var requestObject = new XMLHttpRequest();
     requestObject.overrideMimeType("application/json");
@@ -16,6 +15,7 @@ function loadJSON(file, callback) {
 function callback(response, search) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("results");
+
     if (search) { 
         while (document.getElementsByClassName("data")[0]) {
             content.removeChild(document.getElementsByClassName("data")[0]);
@@ -27,13 +27,13 @@ function callback(response, search) {
         while (document.getElementsByClassName("data")[0]) {
             content.removeChild(document.getElementsByClassName("data")[0]);
         }
+        console.log(sortTerm);
         actualJSON.sort(function (one, another) {
-            console.log(obj.id);
             if (sortDescending) {
-                return one[obj.id] < another[obj.id];
+                return one[sortTerm] < another[sortTerm];
             }
             else {
-                return one[obj.id] > another[obj.id];
+                return one[sortTerm] > another[sortTerm];
             }
 
         });
@@ -103,15 +103,16 @@ function callback(response, search) {
         loadJSON(settings.source, callback);
     };
 
-    $.fn.sortNumber = function (options) {
+    $.fn.customSort = function (options) {
         // Default options
         var settings = $.extend({
-            source: "./data.json"
+            source: "./data.json",
+            sortTerm: "youCanOverideHere"
         }, options);
 
         this.click(function () {
             sort = true;
-            obj = this;
+            sortTerm = settings.sortTerm;
             loadJSON(settings.source, callback);
         });
     };
@@ -150,15 +151,11 @@ function callback(response, search) {
                        
                         res($.map(data, function (item) {
                             if (regex.test(item[settings.searchTerm])) {
-                                obj.push(item);
-                                console.log(settings.searchTerm);
-                                
+                                obj.push(item);                                
                                 callback(JSON.stringify(obj),true);
-
                             }
                            
-                        }));
-                    
+                        }));                
                     },
                     error: function (xhr) {
 
