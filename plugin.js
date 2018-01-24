@@ -7,15 +7,21 @@ function loadJSON(file, callback) {
     requestObject.open('GET', file, true);
     requestObject.onreadystatechange = function () {
         if (requestObject.readyState == 4 && requestObject.status == "200") {
-            callback(requestObject.responseText);
+            callback(requestObject.responseText,false);
         }
     };
     requestObject.send(null);
 }
 
-function callback(response) {
+function callback(response, search) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("results");
+    if (search) { 
+        while (document.getElementsByClassName("data")[0]) {
+            content.removeChild(document.getElementsByClassName("data")[0]);
+        }
+
+    }
 
     if (sort) {
         while (document.getElementsByClassName("data")[0]) {
@@ -83,39 +89,6 @@ function callback(response) {
         div.appendChild(smallDiv4);
 
         table.appendChild(div);
-
-
-
-
-
-        // var div = document.createElement("div");
-        // div.setAttribute("class", "divRow");
-        // var divCell1 = document.createElement("div");
-        // var divCell2 = document.createElement("div");
-        // var divCell3 = document.createElement("div");
-        // var divCell4 = document.createElement("div");
-        // var divCell5 = document.createElement("div");
-        // divCell1.setAttribute("class", "divCell");
-        // divCell2.setAttribute("class", "divCell");
-        // divCell3.setAttribute("class", "divCell");
-        // divCell4.setAttribute("class", "divCell");
-        // divCell5.setAttribute("class", "divCell");
-        // var id = document.createTextNode(actualJSON[i].id);
-        // var name = document.createTextNode(actualJSON[i].name);
-        // var mobile = document.createTextNode(actualJSON[i].mobile);
-        // var salary = document.createTextNode(actualJSON[i].salary);
-        // var address = document.createTextNode(actualJSON[i].address);
-        // divCell1.appendChild(id);
-        // divCell2.appendChild(name);
-        // divCell3.appendChild(mobile);
-        // divCell4.appendChild(salary);
-        // divCell5.appendChild(address);
-        // div.appendChild(divCell1);
-        // div.appendChild(divCell2);
-        // div.appendChild(divCell3);
-        // div.appendChild(divCell4);
-        // div.appendChild(divCell5);
-        // content.appendChild(div);
     }
 }
 
@@ -141,6 +114,63 @@ function callback(response) {
             obj = this;
             loadJSON(settings.source, callback);
         });
+    };
+
+    $.fn.customSearch = function (options) {
+        // Default options
+        var settings = $.extend({
+            source: "./data.json",
+            searchTerm: "youCanOverideHere"
+        }, options);
+
+        $(this).keyup(function () {
+            if (!this.value) {
+                var content = document.getElementById("results");
+                while (document.getElementsByClassName("data")[0]) {
+                    content.removeChild(document.getElementsByClassName("data")[0]);
+                }
+                loadJSON(settings.source,callback);
+            }
+          });
+        
+        $(this).autocomplete({
+            
+            source: function (req, res) {
+            
+                var regex = new RegExp(req.term, 'i');
+                $.ajax({
+                    url: settings.source,
+                    dataType: "json",
+                    type: "GET",
+                    data: {
+                        term: req.term
+                    },
+                    success: function (data) {
+                        var obj = [];
+                       
+                        res($.map(data, function (item) {
+                            if (regex.test(item[settings.searchTerm])) {
+                                obj.push(item);
+                                console.log(settings.searchTerm);
+                                
+                                callback(JSON.stringify(obj),true);
+
+                            }
+                           
+                        }));
+                    
+                    },
+                    error: function (xhr) {
+
+                    }
+                });
+            },
+            select: function (event, ui) {
+               
+                }
+            
+        });
+
     };
 
 
