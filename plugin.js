@@ -89,39 +89,6 @@ function callback(response, search) {
         div.appendChild(smallDiv4);
 
         table.appendChild(div);
-
-
-
-
-
-        // var div = document.createElement("div");
-        // div.setAttribute("class", "divRow");
-        // var divCell1 = document.createElement("div");
-        // var divCell2 = document.createElement("div");
-        // var divCell3 = document.createElement("div");
-        // var divCell4 = document.createElement("div");
-        // var divCell5 = document.createElement("div");
-        // divCell1.setAttribute("class", "divCell");
-        // divCell2.setAttribute("class", "divCell");
-        // divCell3.setAttribute("class", "divCell");
-        // divCell4.setAttribute("class", "divCell");
-        // divCell5.setAttribute("class", "divCell");
-        // var id = document.createTextNode(actualJSON[i].id);
-        // var name = document.createTextNode(actualJSON[i].name);
-        // var mobile = document.createTextNode(actualJSON[i].mobile);
-        // var salary = document.createTextNode(actualJSON[i].salary);
-        // var address = document.createTextNode(actualJSON[i].address);
-        // divCell1.appendChild(id);
-        // divCell2.appendChild(name);
-        // divCell3.appendChild(mobile);
-        // divCell4.appendChild(salary);
-        // divCell5.appendChild(address);
-        // div.appendChild(divCell1);
-        // div.appendChild(divCell2);
-        // div.appendChild(divCell3);
-        // div.appendChild(divCell4);
-        // div.appendChild(divCell5);
-        // content.appendChild(div);
     }
 }
 
