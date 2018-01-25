@@ -202,8 +202,8 @@
     <script>
       $(document).ready(function () {
         $("#divRows").buildTable({ source: "./data.json" });
-        $("#salary").sortNumber();
-        $("#name").sortNumber();
+        $("#salary").customSort({sortTerm:"salary"});
+        $("#name").customSort({sortTerm:"name"});
         $("#nameSearch").customSearch({searchTerm:"name"});
         $("#idSearch").customSearch({searchTerm:"id"});
         $("#mobileSearch").customSearch({searchTerm:"mobile"});
