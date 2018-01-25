@@ -178,7 +178,20 @@ function callback(response, search) {
                         var obj = [];
 
                         res($.map(data, function (item) {
-                            if (regex.test(item[settings.searchTerm])) {
+
+                            if (req.term.includes(">")) {
+                                if (item[settings.searchTerm] > req.term.substring(1)) {
+                                    obj.push(item);
+                                    callback(JSON.stringify(obj), true);
+                                }
+                            }
+                            else if (req.term.includes("<")) {
+                                if (item[settings.searchTerm] < req.term.substring(1)) {
+                                    obj.push(item);
+                                    callback(JSON.stringify(obj), true);
+                                }
+                            }
+                            else if (regex.test(item[settings.searchTerm])) {
                                 obj.push(item);
                                 callback(JSON.stringify(obj), true);
                             }
