@@ -4,7 +4,8 @@
 
   <head>
 
-       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 
     <style type="text/css">
       .table {
@@ -17,7 +18,9 @@
         font-weight: 400;
       }
 
-      .ui-helper-hidden-accessible { display:none; }
+      .ui-helper-hidden-accessible {
+        display: none;
+      }
 
 
       .topnav input[type=text] {
@@ -72,7 +75,7 @@
         border-left: #ccc 1px solid;
       }
 
-      .table_row>.table_small{
+      .table_row>.table_small {
         border-right: #ccc 1px solid;
       }
 
@@ -92,63 +95,64 @@
         .table {
           width: 90%;
         }
+      }
 
-        @media screen and (max-width: 650px) {
-          .table {
-            display: block;
-          }
-          .table_row:nth-child(2n+3) {
-            background: none;
-          }
-          .theader {
-            display: none;
-          }
-          .table_row>.table_small>.table_cell:nth-child(odd) {
-            display: table-cell;
-            width: 50%;
-          }
-          .table_cell {
-            display: table-cell;
-            width: 50%;
-          }
-          .table_row {
-            display: table;
-            width: 100%;
-            border-collapse: separate;
-            padding-bottom: 20px;
-            margin: 5% auto 0;
-            text-align: center;
-          }
-          .table_small {
-            display: table-row;
-          }
-          .table_row>.table_small:first-child>.table_cell:last-child {
-            border-left: none;
-          }
-          .table_row>.table_small>.table_cell:first-child {
-            border-left: #ccc 1px solid;
-          }
-          .table_row>.table_small:first-child>.table_cell:first-child {
-            border-top-left-radius: 5px;
-            border-top: #ccc 1px solid;
-          }
-          .table_row>.table_small:first-child>.table_cell:last-child {
-            border-top-right-radius: 5px;
-            border-top: #ccc 1px solid;
-          }
-          .table_row>.table_small:last-child>.table_cell:first-child {
-            border-right: none;
-          }
-          .table_row>.table_small>.table_cell:last-child {
-            border-right: #ccc 1px solid;
-          }
-          .table_row>.table_small:last-child>.table_cell:first-child {
-            border-bottom-left-radius: 5px;
-          }
-          .table_row>.table_small:last-child>.table_cell:last-child {
-            border-bottom-right-radius: 5px;
-          }
+      @media screen and (max-width: 650px) {
+        .table {
+          display: block;
         }
+        .table_row:nth-child(2n+3) {
+          background: none;
+        }
+        .theader {
+          display: none;
+        }
+        .table_row>.table_small>.table_cell:nth-child(odd) {
+          display: table-cell;
+          width: 50%;
+        }
+        .table_cell {
+          display: table-cell;
+          width: 50%;
+        }
+        .table_row {
+          display: table;
+          width: 100%;
+          border-collapse: separate;
+          padding-bottom: 20px;
+          margin: 5% auto 0;
+          text-align: center;
+        }
+        .table_small {
+          display: table-row;
+        }
+        .table_row>.table_small:first-child>.table_cell:last-child {
+          border-left: none;
+        }
+        .table_row>.table_small>.table_cell:first-child {
+          border-left: #ccc 1px solid;
+        }
+        .table_row>.table_small:first-child>.table_cell:first-child {
+          border-top-left-radius: 5px;
+          border-top: #ccc 1px solid;
+        }
+        .table_row>.table_small:first-child>.table_cell:last-child {
+          border-top-right-radius: 5px;
+          border-top: #ccc 1px solid;
+        }
+        .table_row>.table_small:last-child>.table_cell:first-child {
+          border-right: none;
+        }
+        .table_row>.table_small>.table_cell:last-child {
+          border-right: #ccc 1px solid;
+        }
+        .table_row>.table_small:last-child>.table_cell:first-child {
+          border-bottom-left-radius: 5px;
+        }
+        .table_row>.table_small:last-child>.table_cell:last-child {
+          border-bottom-right-radius: 5px;
+        }
+      }
     </style>
   </head>
 
@@ -160,65 +164,15 @@
     <hr>
 
     <div class="table" id="results">
-      <div class='theader'>
-        <div class='table_header ' id="id" style="cursor: pointer;"  > ID
-        <span class="glyphicon glyphicon-sort"></span>
-        </div>
-        <div class='table_header' id="name" style="cursor: pointer; "> Name
-          <span class="glyphicon glyphicon-sort"></span>
-        </div>
-        <div class='table_header'>Mobile No.</div>
-        <div class='table_header' id="salary" style="cursor: pointer; "> Salary
-          <span class="glyphicon glyphicon-sort"></span>
-        </div>
-      </div>
-
-      <div class='table_row'>
-        <div class='table_small'>
-          <div class='table_cell'></div>
-          <div class="topnav">
-            <input type="text" placeholder="Search" id="idSearch">
-          </div>
-        </div>
-        <div class='table_small'>
-          <div class='table_cell'></div>
-          <div class="topnav">
-            <input type="text" placeholder="Search" id="nameSearch">
-          </div>
-        </div>
-        <div class='table_small'>
-          <div class='table_cell'></div>
-          <div class="topnav">
-            <input type="text" placeholder="Search" id="mobileSearch">
-          </div>
-        </div>
-        <div class='table_small'>
-          <div class='table_cell'></div>
-          <div class="topnav">
-            <input type="text" placeholder="Search" id="salarySearch">
-          </div>
-        </div>
-      </div>
 
     </div>
     <script src="http://code.jquery.com/jquery-3.2.1.min.js "></script>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-
     <script src="./plugin.js"></script>
     <script>
-      $(document).ready(function () {
-        $("#divRows").buildTable({ source: "./data.json" });
-        $("#salary").customSort({sortTerm:"salary"});
-        $("#id").customSort({sortTerm:"id"});
-        $("#name").customSort({sortTerm:"name"});
-        $("#nameSearch").customSearch({searchTerm:"name"});
-        $("#idSearch").customSearch({searchTerm:"id"});
-        $("#mobileSearch").customSearch({searchTerm:"mobile"});
-        $("#salarySearch").customSearch({searchTerm:"salary"});
-      });
+      $("#results").buildTable({ source: "./data.json" });
     </script>
-
 
 
   </body>

@@ -1,22 +1,76 @@
-
-var sortDescending = true, sort = false, sortTerm;
+var sortDescending = true, sort = false, sortTerm, header = true;
 function loadJSON(file, callback) {
     var requestObject = new XMLHttpRequest();
     requestObject.overrideMimeType("application/json");
     requestObject.open('GET', file, true);
     requestObject.onreadystatechange = function () {
         if (requestObject.readyState == 4 && requestObject.status == "200") {
-            callback(requestObject.responseText,false);
+            if (header) {
+                header = false;
+                buildHeader(requestObject.responseText);
+            }
+            callback(requestObject.responseText, false);
         }
     };
     requestObject.send(null);
+}
+function setAttributes(el, attrs) {
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
+    }
+}
+
+function buildHeader(response) {
+    var result = JSON.parse(response);
+    var table = document.getElementById("results");
+    var head = document.createElement("div");
+    setAttributes(head, { "class": "theader" });
+
+    // Building head labels for each column
+    $.each(result[0], function (key, value) {
+        var col = document.createElement("div");
+        setAttributes(col, { "class": "table_header", "id": key, "style": "cursor: pointer;" });
+        var colText = document.createTextNode(key + " ");
+        var spanElement = document.createElement("span");
+        setAttributes(spanElement, { "class": "glyphicon glyphicon-sort" });
+        col.appendChild(colText);
+        col.appendChild(spanElement);
+        head.appendChild(col);
+
+    });
+
+    table.appendChild(head);
+
+    var divRow = document.createElement("div");
+    setAttributes(divRow, { "class": "table_row" });
+    //Building search input box for each column
+    $.each(result[0], function (key, value) {
+        var divSmall = document.createElement("div");
+        setAttributes(divSmall, { "class": "table_small" });
+        var tableCell = document.createElement("div");
+        setAttributes(tableCell, { "class": "table_cell" });
+        var topNav = document.createElement("div");
+        setAttributes(topNav, { "class": "topnav" });
+        var inputSearch = document.createElement("input");
+        setAttributes(inputSearch, { "type": "text", "placeholder": "Search", "id": key + "Search" });
+        topNav.appendChild(inputSearch);
+        divSmall.appendChild(tableCell);
+        divSmall.appendChild(topNav);
+        divRow.appendChild(divSmall);
+    });
+    table.appendChild(divRow);
+    // Attatching sort and search functionality to each column
+    $.each(result[0], function (key, value) {
+        $("#" + key).customSort({ sortTerm: key });
+        $("#" + key + "Search").customSearch({ searchTerm: key });
+    });
 }
 
 function callback(response, search) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("results");
 
-    if (search) { 
+    if (search) {
         while (document.getElementsByClassName("data")[0]) {
             content.removeChild(document.getElementsByClassName("data")[0]);
         }
@@ -27,7 +81,6 @@ function callback(response, search) {
         while (document.getElementsByClassName("data")[0]) {
             content.removeChild(document.getElementsByClassName("data")[0]);
         }
-        console.log(sortTerm);
         actualJSON.sort(function (one, another) {
             if (sortDescending) {
                 return one[sortTerm] < another[sortTerm];
@@ -35,7 +88,6 @@ function callback(response, search) {
             else {
                 return one[sortTerm] > another[sortTerm];
             }
-
         });
         if (sortDescending) sortDescending = false;
         else sortDescending = true;
@@ -51,42 +103,18 @@ function callback(response, search) {
         var div = document.createElement("div");
         div.setAttribute("class", "table_row data");
 
-        var smallDiv1 = document.createElement("div");
-        smallDiv1.setAttribute("class", "table_small");
-        var cellDiv1 = document.createElement("div");
-        cellDiv1.setAttribute("class", "table_cell");
-        var textNode1 = document.createTextNode(actualJSON[i].id);
-        cellDiv1.appendChild(textNode1);
-        smallDiv1.appendChild(cellDiv1);
+        $.each(actualJSON[0], function (key, value) {
 
-        var smallDiv2 = document.createElement("div");
-        smallDiv2.setAttribute("class", "table_small");
-        var cellDiv2 = document.createElement("div");
-        cellDiv2.setAttribute("class", "table_cell");
-        var textNode2 = document.createTextNode(actualJSON[i].name);
-        cellDiv2.appendChild(textNode2);
-        smallDiv2.appendChild(cellDiv2);
-
-        var smallDiv3 = document.createElement("div");
-        smallDiv3.setAttribute("class", "table_small");
-        var cellDiv3 = document.createElement("div");
-        cellDiv3.setAttribute("class", "table_cell");
-        var textNode3 = document.createTextNode(actualJSON[i].mobile);
-        cellDiv3.appendChild(textNode3);
-        smallDiv3.appendChild(cellDiv3);
-
-        var smallDiv4 = document.createElement("div");
-        smallDiv4.setAttribute("class", "table_small");
-        var cellDiv4 = document.createElement("div");
-        cellDiv4.setAttribute("class", "table_cell");
-        var textNode4 = document.createTextNode(actualJSON[i].salary);
-        cellDiv4.appendChild(textNode4);
-        smallDiv4.appendChild(cellDiv4);
-
-        div.appendChild(smallDiv1);
-        div.appendChild(smallDiv2);
-        div.appendChild(smallDiv3);
-        div.appendChild(smallDiv4);
+            var smallDiv = document.createElement("div");
+            smallDiv.setAttribute("class", "table_small");
+            var cellDiv = document.createElement("div");
+            cellDiv.setAttribute("class", "table_cell");
+            var tempObj = actualJSON[i];
+            var textNode = document.createTextNode(tempObj[key]);
+            cellDiv.appendChild(textNode);
+            smallDiv.appendChild(cellDiv);
+            div.appendChild(smallDiv);
+        });
 
         table.appendChild(div);
     }
@@ -99,7 +127,6 @@ function callback(response, search) {
         var settings = $.extend({
             source: "./data.json"
         }, options);
-
         loadJSON(settings.source, callback);
     };
 
@@ -125,19 +152,20 @@ function callback(response, search) {
         }, options);
 
         $(this).keyup(function () {
+            // If search box gets empty
             if (!this.value) {
                 var content = document.getElementById("results");
                 while (document.getElementsByClassName("data")[0]) {
                     content.removeChild(document.getElementsByClassName("data")[0]);
                 }
-                loadJSON(settings.source,callback);
+                loadJSON(settings.source, callback);
             }
-          });
-        
+        });
+
         $(this).autocomplete({
-            
+
             source: function (req, res) {
-            
+
                 var regex = new RegExp(req.term, 'i');
                 $.ajax({
                     url: settings.source,
@@ -148,14 +176,14 @@ function callback(response, search) {
                     },
                     success: function (data) {
                         var obj = [];
-                       
+
                         res($.map(data, function (item) {
                             if (regex.test(item[settings.searchTerm])) {
-                                obj.push(item);                                
-                                callback(JSON.stringify(obj),true);
+                                obj.push(item);
+                                callback(JSON.stringify(obj), true);
                             }
-                           
-                        }));                
+
+                        }));
                     },
                     error: function (xhr) {
 
@@ -163,13 +191,11 @@ function callback(response, search) {
                 });
             },
             select: function (event, ui) {
-               
-                }
-            
+
+            }
+
         });
 
     };
-
-
 }(jQuery));
 
