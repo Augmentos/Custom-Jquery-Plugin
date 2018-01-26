@@ -179,14 +179,27 @@ function callback(response, search) {
 
                         res($.map(data, function (item) {
 
-                            if (req.term.includes(">")) {
-                                if (item[settings.searchTerm] > req.term.substring(1)) {
+                            if (req.term.includes(">=")) {
+                                if (item[settings.searchTerm] >= req.term.substring(2)) {
+                                    obj.push(item);
+                                    callback(JSON.stringify(obj), true);
+                                }
+                            }
+                            else if (req.term.includes("<=")) {
+                                if (item[settings.searchTerm] <= req.term.substring(2)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
                                 }
                             }
                             else if (req.term.includes("<")) {
                                 if (item[settings.searchTerm] < req.term.substring(1)) {
+                                    obj.push(item);
+                                    callback(JSON.stringify(obj), true);
+                                }
+                            }
+                            else if (req.term.includes(">")) {
+                                console.log("equal");
+                                if (item[settings.searchTerm] > req.term.substring(1)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
                                 }
