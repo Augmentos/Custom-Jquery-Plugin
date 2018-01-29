@@ -74,7 +74,6 @@ function callback(response, search) {
         while (document.getElementsByClassName("data")[0]) {
             content.removeChild(document.getElementsByClassName("data")[0]);
         }
-
     }
 
     if (sort) {
@@ -93,6 +92,8 @@ function callback(response, search) {
         else sortDescending = true;
         sort = false;
     }
+
+
 
 
 
@@ -208,6 +209,7 @@ function callback(response, search) {
                                 obj.push(item);
                                 callback(JSON.stringify(obj), true);
                             }
+                            else callback(JSON.stringify(obj), true);
 
                         }));
                     },
