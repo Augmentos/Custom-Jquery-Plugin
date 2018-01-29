@@ -29,10 +29,10 @@ function buildHeader(response) {
     // Building head labels for each column
     $.each(result[0], function (key, value) {
         var col = document.createElement("div");
-        setAttributes(col, { "class": "table_header", "id": key, "style": "cursor: pointer;" });
+        setAttributes(col, { "class": "table_header" });
         var colText = document.createTextNode(key + " ");
         var spanElement = document.createElement("span");
-        setAttributes(spanElement, { "class": "glyphicon glyphicon-sort" });
+        setAttributes(spanElement, { "class": "glyphicon glyphicon-sort", "id": key, "style": "cursor: pointer;" });
         col.appendChild(colText);
         col.appendChild(spanElement);
         head.appendChild(col);
