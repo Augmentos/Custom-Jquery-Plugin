@@ -1,48 +1,48 @@
 [
     {
-        "ID": "1",
+        "ID": 1,
         "Name": "XYZ",
-        "Mobile": "8619326104",
+        "Mobile": 8619326104,
         "Salary": 2000,
         "Address": "Chennai",
         "Points": 47
     },
     {
-        "ID": "2",
+        "ID": 2,
         "Name": "BC",
-        "Mobile": "9566701002",
+        "Mobile": 9566701002,
         "Salary": 3000,
         "Address": "Delhi",
         "Points": 26
     },
     {
-        "ID": "3",
+        "ID": 3,
         "Name": "Mano",
-        "Mobile": "9566701002",
+        "Mobile": 9566701002,
         "Salary": 1000,
         "Address": "Delhi",
         "Points": 12
     },
     {
-        "ID": "4",
+        "ID": 4,
         "Name": "Opq",
-        "Mobile": "9566701002",
+        "Mobile": 9566701002,
         "Salary": 9000,
         "Address": "Delhi",
         "Points": 87
     },
     {
-        "ID": "5",
+        "ID": 5,
         "Name": "Ypq",
-        "Mobile": "9566701002",
+        "Mobile": 9566701002,
         "Salary": 90,
         "Address": "Delhi",
         "Points": 67
     },
     {
-        "ID": "6",
+        "ID": 6,
         "Name": "Ypq",
-        "Mobile": "9566701002",
+        "Mobile": 9566701002,
         "Salary": 280,
         "Address": "Delhi",
         "Points": 18

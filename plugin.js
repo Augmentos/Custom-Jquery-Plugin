@@ -64,7 +64,6 @@ function buildHeader(response) {
         $(result).each(function (idx, obj) {
 
             $(obj).each(function (term, value) {
-                console.log("asda");
                 if (!(value[key] in lookup)) {
 
                     lookup[value[key]] = 1;
@@ -157,7 +156,6 @@ function buildHeader(response) {
         $("#" + key).customSort({ sortTerm: key });
         $("#" + key + "Search").customSearch({ searchTerm: key });
         $('#' + key + "Filter").on('click', function (ev) {
-            console.log("hereee");
             $('#' + key + 'Modal').modal('show');
 
         })
@@ -206,7 +204,6 @@ function callback(response, search = false) {
 
         if (filter) {
             var tempObj = actualJSON[i];
-            console.log(tempObj[filterParam]);
             if (!(tempObj[filterParam] in filterObject))
                 continue;
 
@@ -220,7 +217,10 @@ function callback(response, search = false) {
             var cellDiv = document.createElement("div");
             cellDiv.setAttribute("class", "table_cell");
             var tempObj = actualJSON[i];
-            var textNode = document.createTextNode(tempObj[key]);
+            var textNode;
+            if (typeof tempObj[key] != 'undefined')
+                textNode = document.createTextNode(tempObj[key]);
+            else textNode = document.createTextNode("( no value )");
             cellDiv.appendChild(textNode);
             smallDiv.appendChild(cellDiv);
             div.appendChild(smallDiv);
@@ -271,7 +271,6 @@ function callback(response, search = false) {
                 loadJSON(settings.source, callback);
             }
         });
-
         $(this).autocomplete({
 
             source: function (req, res) {
@@ -288,27 +287,26 @@ function callback(response, search = false) {
                         var obj = [];
 
                         res($.map(data, function (item) {
-
-                            if (req.term.includes(">=")) {
+                            console.log(settings.searchTerm + typeof item[settings.searchTerm]);
+                            if (req.term.includes(">=") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] >= req.term.substring(2)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
                                 }
                             }
-                            else if (req.term.includes("<=")) {
+                            else if (req.term.includes("<=") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] <= req.term.substring(2)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
                                 }
                             }
-                            else if (req.term.includes("<")) {
+                            else if (req.term.includes("<") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] < req.term.substring(1)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
                                 }
                             }
-                            else if (req.term.includes(">")) {
-                                console.log("equal");
+                            else if (req.term.includes(">") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] > req.term.substring(1)) {
                                     obj.push(item);
                                     callback(JSON.stringify(obj), true);
@@ -335,4 +333,3 @@ function callback(response, search = false) {
 
     };
 }(jQuery));
-
