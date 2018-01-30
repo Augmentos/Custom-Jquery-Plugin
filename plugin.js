@@ -287,36 +287,35 @@ function callback(response, search = false) {
                         var obj = [];
 
                         res($.map(data, function (item) {
-                            console.log(settings.searchTerm + typeof item[settings.searchTerm]);
                             if (req.term.includes(">=") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] >= req.term.substring(2)) {
                                     obj.push(item);
-                                    callback(JSON.stringify(obj), true);
                                 }
+
                             }
                             else if (req.term.includes("<=") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] <= req.term.substring(2)) {
                                     obj.push(item);
-                                    callback(JSON.stringify(obj), true);
                                 }
+
                             }
                             else if (req.term.includes("<") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] < req.term.substring(1)) {
                                     obj.push(item);
-                                    callback(JSON.stringify(obj), true);
                                 }
+
                             }
                             else if (req.term.includes(">") && typeof item[settings.searchTerm] == "number") {
                                 if (item[settings.searchTerm] > req.term.substring(1)) {
                                     obj.push(item);
-                                    callback(JSON.stringify(obj), true);
                                 }
+
                             }
                             else if (regex.test(item[settings.searchTerm])) {
                                 obj.push(item);
-                                callback(JSON.stringify(obj), true);
+
                             }
-                            else callback(JSON.stringify(obj), true);
+                            callback(JSON.stringify(obj), true);
 
                         }));
                     },
