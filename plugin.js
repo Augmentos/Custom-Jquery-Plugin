@@ -1,5 +1,6 @@
 var sortDescending = true, sort = false, sortTerm, header = true, filter = false, filterParam;
 var filterObject = {}, gResponse;
+
 function loadJSON(file, callback) {
     var requestObject = new XMLHttpRequest();
     requestObject.overrideMimeType("application/json");
@@ -40,8 +41,10 @@ function buildHeader(response) {
 
         var divModal = document.createElement("div");
         var contentModal = document.createElement("div");
-        setAttributes(contentModal, { "class": "modal-content" });
-        setAttributes(divModal, { "class": "modal fade", "id": key + "Modal", "role": "dialog", "tabindex": "-1", "aria-labelledBy": "example", "aria-hidden": "true" });
+        var dialogModal = document.createElement("div");
+        setAttributes(dialogModal, { "class": "modal-dialog" });
+        setAttributes(contentModal, { "class": "modal-content " });
+        setAttributes(divModal, { "class": "modal fade ", "id": key + "Modal", "role": "dialog", "tabindex": "-1", "aria-labelledBy": "example", "aria-hidden": "true" });
         var modalHeader = document.createElement("div");
         setAttributes(modalHeader, { "class": "modal-header" });
         var headerTitle = document.createElement("h3");
@@ -52,8 +55,7 @@ function buildHeader(response) {
         setAttributes(modalButton, { "type": "button", "class": "close", "data-dismiss": "modal", "aria-label": "Close" });
         var spanClose = document.createElement("span");
         setAttributes(spanClose, { "aria-hidden": "true" });
-        var spanContent = document.createTextNode("Close");
-        spanClose.appendChild(spanContent);
+        spanClose.innerHTML = "&times;";
         modalButton.appendChild(spanClose);
         var modalBody = document.createElement("div");
         setAttributes(modalBody, { "class": "modal-body" });
@@ -105,18 +107,17 @@ function buildHeader(response) {
             filter = true;
             callback(gResponse);
             $('#' + key + 'Modal').modal('hide');
-
-
         });
-
-        modalHeader.appendChild(headerTitle);
         modalHeader.appendChild(modalButton);
+        modalHeader.appendChild(headerTitle);
+
         contentModal.appendChild(modalHeader);
         modalFooter.appendChild(modalFilter);
 
         contentModal.appendChild(modalBody);
         contentModal.appendChild(modalFooter);
-        divModal.appendChild(contentModal);
+        dialogModal.appendChild(contentModal);
+        divModal.appendChild(dialogModal);
         var spanText = document.createElement("span");
         var colText = document.createTextNode(key + " ");
         spanText.appendChild(colText);
