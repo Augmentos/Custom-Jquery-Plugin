@@ -1,4 +1,5 @@
-var sortDescending = true, sort = false, sortTerm, header = true;
+var sortDescending = true, sort = false, sortTerm, header = true, filter = false, filterParam;
+var filterObject = {}, gResponse;
 function loadJSON(file, callback) {
     var requestObject = new XMLHttpRequest();
     requestObject.overrideMimeType("application/json");
@@ -9,6 +10,7 @@ function loadJSON(file, callback) {
                 header = false;
                 buildHeader(requestObject.responseText);
             }
+            gResponse = requestObject.responseText;
             callback(requestObject.responseText, false);
         }
     };
@@ -20,6 +22,11 @@ function setAttributes(el, attrs) {
     }
 }
 
+function customFilter(response) {
+
+}
+
+
 function buildHeader(response) {
     var result = JSON.parse(response);
     var table = document.getElementById("results");
@@ -29,13 +36,98 @@ function buildHeader(response) {
     // Building head labels for each column
     $.each(result[0], function (key, value) {
         var col = document.createElement("div");
-        setAttributes(col, { "class": "table_header" });
+        setAttributes(col, { "class": "table_header", "style": "cursor: pointer;" });
+
+        var divModal = document.createElement("div");
+        var contentModal = document.createElement("div");
+        setAttributes(contentModal, { "class": "modal-content" });
+        setAttributes(divModal, { "class": "modal fade", "id": key + "Modal", "role": "dialog", "tabindex": "-1", "aria-labelledBy": "example", "aria-hidden": "true" });
+        var modalHeader = document.createElement("div");
+        setAttributes(modalHeader, { "class": "modal-header" });
+        var headerTitle = document.createElement("h3");
+        setAttributes(headerTitle, { "class": "modal-title" });
+        var headerText = document.createTextNode("Filter");
+        headerTitle.appendChild(headerText);
+        var modalButton = document.createElement("button");
+        setAttributes(modalButton, { "type": "button", "class": "close", "data-dismiss": "modal", "aria-label": "Close" });
+        var spanClose = document.createElement("span");
+        setAttributes(spanClose, { "aria-hidden": "true" });
+        var spanContent = document.createTextNode("Close");
+        spanClose.appendChild(spanContent);
+        modalButton.appendChild(spanClose);
+        var modalBody = document.createElement("div");
+        setAttributes(modalBody, { "class": "modal-body" });
+
+        var lookup = {};
+        $(result).each(function (idx, obj) {
+
+            $(obj).each(function (term, value) {
+                console.log("asda");
+                if (!(value[key] in lookup)) {
+
+                    lookup[value[key]] = 1;
+
+                    var checkbox = document.createElement('input');
+                    checkbox.type = "checkbox";
+                    checkbox.name = key + "Name";
+                    checkbox.value = value[key];
+                    checkbox.id = key + "id";
+
+                    var label = document.createElement('label')
+                    label.htmlFor = key + "id";
+                    label.appendChild(document.createTextNode("\u00A0" + value[key]));
+
+                    modalBody.appendChild(checkbox);
+                    modalBody.appendChild(label);
+                    var br = document.createElement("br");
+                    modalBody.appendChild(br);
+
+                }
+            });
+        });
+
+        var modalFooter = document.createElement("div");
+        setAttributes(modalFooter, { "class": "modal-footer" });
+        var modalFilter = document.createElement("button");
+        setAttributes(modalFilter, { "class": "btn btn-primary", "type": "submit" });
+        var submitText = document.createTextNode("Filter");
+        modalFilter.appendChild(submitText);
+
+        modalFilter.addEventListener("click", function () {
+            var filterObj = {};
+            $('input[type=checkbox]').each(function () {
+                if (this.checked)
+                    filterObj[$(this).val()] = 1;
+                // arr.push($(this).val());
+            });
+            filterParam = key;
+            filterObject = filterObj;
+            filter = true;
+            callback(gResponse);
+            $('#' + key + 'Modal').modal('hide');
+
+
+        });
+
+        modalHeader.appendChild(headerTitle);
+        modalHeader.appendChild(modalButton);
+        contentModal.appendChild(modalHeader);
+        modalFooter.appendChild(modalFilter);
+
+        contentModal.appendChild(modalBody);
+        contentModal.appendChild(modalFooter);
+        divModal.appendChild(contentModal);
+        var spanText = document.createElement("span");
         var colText = document.createTextNode(key + " ");
+        spanText.appendChild(colText);
+        setAttributes(spanText, { "id": key + "Filter" });
         var spanElement = document.createElement("span");
         setAttributes(spanElement, { "class": "glyphicon glyphicon-sort", "id": key, "style": "cursor: pointer;" });
-        col.appendChild(colText);
+        col.appendChild(spanText);
         col.appendChild(spanElement);
         head.appendChild(col);
+
+        body.appendChild(divModal);
 
     });
 
@@ -63,10 +155,17 @@ function buildHeader(response) {
     $.each(result[0], function (key, value) {
         $("#" + key).customSort({ sortTerm: key });
         $("#" + key + "Search").customSearch({ searchTerm: key });
+        $('#' + key + "Filter").on('click', function (ev) {
+            console.log("hereee");
+            $('#' + key + 'Modal').modal('show');
+
+        })
     });
+
+
 }
 
-function callback(response, search) {
+function callback(response, search = false) {
     var actualJSON = JSON.parse(response);
     var content = document.getElementById("results");
 
@@ -92,9 +191,9 @@ function callback(response, search) {
         else sortDescending = true;
         sort = false;
     }
-
-
-
+    while (document.getElementsByClassName("data")[0]) {
+        content.removeChild(document.getElementsByClassName("data")[0]);
+    }
 
 
     for (var i = 0; i < actualJSON.length; i++) {
@@ -104,7 +203,16 @@ function callback(response, search) {
         var div = document.createElement("div");
         div.setAttribute("class", "table_row data");
 
+        if (filter) {
+            var tempObj = actualJSON[i];
+            console.log(tempObj[filterParam]);
+            if (!(tempObj[filterParam] in filterObject))
+                continue;
+
+        }
+
         $.each(actualJSON[0], function (key, value) {
+
 
             var smallDiv = document.createElement("div");
             smallDiv.setAttribute("class", "table_small");
