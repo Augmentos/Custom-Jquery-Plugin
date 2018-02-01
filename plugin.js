@@ -268,7 +268,7 @@ function callback(response, search = false) {
                 continue;
 
         }
-
+        // This will append each JSON data into each cell of table.
         $.each(actualJSON[0], function (key, value) {
             var smallDiv = document.createElement("div");
             smallDiv.setAttribute("class", "table_small");
